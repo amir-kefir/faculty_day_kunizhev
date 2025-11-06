@@ -16,6 +16,6 @@ fun main() {
     num += 1
     println(num)
 
-    var n: Int? = Null
+    var n: Int? = null
     println(n)
 }
