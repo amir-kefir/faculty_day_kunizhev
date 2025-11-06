@@ -6,8 +6,8 @@ fun sumEvenNumbers(numbers: Array<Int>): Int {
         if (i % 2 == 0) {
             count += i
         }
-    println(count)
     }
+    return count
 }
 
 fun sumEvenNumbers2(numbers: Array<Int>): Int =
