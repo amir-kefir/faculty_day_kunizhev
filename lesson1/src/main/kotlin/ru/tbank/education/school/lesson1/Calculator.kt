@@ -4,7 +4,12 @@ package ru.tbank.education.school.lesson1
  * Метод для вычисления простых арифметических операций.
  */
 fun calculate(a: Double, b: Double, operation: OperationType): Double? {
-    TODO()
+    when (operation) {
+        OperationType.DIVIDE -> if (a != 0) a / b else null
+        OperationType.MULTIPLY -> a*b
+        OperationType.SUBTRACT -> a-b
+        OperationType.ADD -> a+b
+    }
 }
 
 /**
@@ -14,5 +19,5 @@ fun calculate(a: Double, b: Double, operation: OperationType): Double? {
  */
 @Suppress("ReturnCount")
 fun String.calculate(): Double? {
-    TODO()
+
 }
