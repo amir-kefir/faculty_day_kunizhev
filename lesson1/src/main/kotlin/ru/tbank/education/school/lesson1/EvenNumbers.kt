@@ -13,7 +13,15 @@ fun sumEvenNumbers(numbers: Array<Int>): Int {
 fun sumEvenNumbers2(numbers: Array<Int>): Int =
     numbers.filter{ it % 2 == 0}.sum()
 
+fun manyTypes: Boolean (
+    a: Boolean,
+    b: Boolean
+) {
+    return (a==b)
+}
+
 fun main() {
     var array = arrayOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
     println(sumEvenNumbers2(array))
+    println(manyTypes(a = true, b = false))
 }
