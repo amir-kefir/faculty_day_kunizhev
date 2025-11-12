@@ -6,7 +6,7 @@ fun main() {
     val end = "kefir"
 
     val str = """
-        My git username starts with $amir,
+        My git username starts with $start,
         has "$mid" in the middle
         and ends with $end
     """.trimIndent()
@@ -22,17 +22,18 @@ fun main() {
     // theory
 
     val j = when (n) {
-        !null -> 123
-        is Int -> 321
+        null -> 123
+        else -> 321
     }
+    println(j) // добавил вывод чтобы переменная использовалась
 
     // arrays
     val array = arrayOf(1, 2, 3)
 
     val doubleArray = arrayOf(
-        arrayOf(1, 2 ,3)
-        arrayOf(1, 2 ,3)
-        arrayOf(1, 2 ,3)
+        arrayOf(1, 2, 3),
+        arrayOf(1, 2, 3),
+        arrayOf(1, 2, 3)
     )
     // OR
     val doubleArray2 =
