@@ -8,9 +8,9 @@ fun calculate(a: Double, b: Double, operation: OperationType): Double? {
         OperationType.DIVIDE -> if (b != 0.0) a / b else {
             println("Cannot divide by zero!")
             null }
-        OperationType.MULTIPLY -> a*b
-        OperationType.SUBTRACT -> a-b
-        OperationType.ADD -> a+b
+        OperationType.MULTIPLY -> a * b
+        OperationType.SUBTRACT -> a - b
+        OperationType.ADD -> a + b
     }
 }
 
