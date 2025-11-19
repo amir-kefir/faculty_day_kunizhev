@@ -1,5 +1,8 @@
 package ru.tbank.education.school.lesson2.homework.task_manager
 
+import ru.tbank.education.school.lesson2.homework.task_manager.SimpleTask
+import javax.print.attribute.standard.JobPriority
+
 class Project (
     id: String,
     description: String,
@@ -19,6 +22,23 @@ class Project (
     failureReason,
     parent,
 ) {
+
+    constructor(
+        id: String,
+        title: String,
+        description: String,
+        priority: Int = 0,
+    ) : this(
+        id = id,
+        title = title,
+        description = description,
+        priority = priority,
+        status = StatusType.ToDo,
+        failureReason = "-",
+        parent = null,
+        tasks = emptyArray()
+    )
+
     // user-start
     override fun assignUser(user: User?): Boolean {
         println("Error: Cannot assign user to Project")
@@ -53,22 +73,6 @@ class Project (
     }
     // user-end
 
-    fun calculateProgress(inPercents: Boolean? = false): Double{
-        var progress: Double = 0.0
-        for (task in tasks) {
-            progress += when (task.getStatus()) {
-                StatusType.Done -> 1.0
-                StatusType.InProgress -> .5
-                StatusType.ToDo -> 0.0
-                else -> 0.0
-            }
-        }
-        return when (inPercents) {
-            true -> progress/tasks.size
-            false -> progress/tasks.size*100
-            null -> progress/tasks.size*100
-        }
-    }
     fun changePriorityToHighest(task: Task? = null): Boolean{
         if (task != null) {
             task.priority = 1
@@ -124,5 +128,28 @@ class Project (
         if (completedTasks == tasks.size) currentStatus = StatusType.Done
         changeStatus(currentStatus)
         return true
+    }
+
+    //
+
+    override fun calculateProgress(inPercents: Boolean?): Double{
+        var progress: Double = 0.0
+        for (task in tasks) {
+            progress += when (task.getStatus()) {
+                StatusType.Done -> 1.0
+                StatusType.InProgress -> .5
+                StatusType.ToDo -> 0.0
+                else -> 0.0
+            }
+        }
+        return when (inPercents) {
+            true -> progress/tasks.size
+            false -> progress/tasks.size*100
+            null -> progress/tasks.size*100
+        }
+    }
+
+    override fun getObjectType(): String {
+        return "Project"
     }
 }

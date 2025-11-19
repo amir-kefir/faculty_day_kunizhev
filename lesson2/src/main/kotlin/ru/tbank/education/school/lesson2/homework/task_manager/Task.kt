@@ -1,18 +1,50 @@
 package ru.tbank.education.school.lesson2.homework.task_manager
 
+abstract class BaseTask {
+    abstract fun calculateProgress(inPercents: Boolean? = false): Double
+    abstract fun getObjectType(): String
+}
+
 open class Task (
-    val id: String,
+    private var id: String,
     protected var user: User?,
     private var title: String,
     private var description: String,
     var priority: Int = 0,
     protected var status: StatusType,
     var failureReason: String,
-    val parent: Project?,
-) {
+    var parent: Project?,
+) : BaseTask() {
+
+    constructor(
+        id: String,
+        user: User?,
+        title: String,
+        description: String,
+        priority: Int = 0,
+    ) : this(
+        id = id,
+        user = user,
+        title = title,
+        description = description,
+        priority = priority,
+        status = StatusType.ToDo,
+        failureReason = "-",
+        parent = null,
+    )
+
+    fun getId(): String{
+        return this.id
+    }
+
+    fun changeId(newId: String?): Boolean{
+        if (newId != null) this.id = newId
+        return true
+    }
+
     // user - start
     open fun assignUser(user: User?): Boolean {
-        if (user != null) {
+        if (user != null && this.getStatus() != StatusType.Done) {
             this.user = user
             return true
         } else return false
@@ -72,5 +104,20 @@ open class Task (
 
     fun getStatus(): StatusType {
         return this.status
+    }
+
+    //abstract
+
+    override fun calculateProgress(inPercents: Boolean?): Double {
+        return when (this.getStatus()) {
+            StatusType.Failed -> 0.0
+            StatusType.ToDo -> 0.0
+            StatusType.InProgress -> if (inPercents == true) 50.0 else 0.5
+            StatusType.Done -> if (inPercents == true) 100.0 else 1.0
+        }
+    }
+
+    override fun getObjectType(): String {
+        return "Default Task"
     }
 }
