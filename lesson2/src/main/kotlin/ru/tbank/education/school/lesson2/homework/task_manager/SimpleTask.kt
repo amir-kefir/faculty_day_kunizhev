@@ -1,7 +1,5 @@
 package ru.tbank.education.school.lesson2.homework.task_manager
 
-import ru.tbank.education.school.lesson2.homework.task_manager.Task
-
 class SimpleTask (
     id: String,
     user: User?,
@@ -48,11 +46,11 @@ class SimpleTask (
         return ""
     }
 
-    override fun changeStatus(type: StatusType?): Boolean {
+    override fun changeStatus(type: StatusType?, updateParent: Boolean): Boolean {
         if (type != null) {
             if (type != StatusType.InProgress) {
                 this.status = type
-                parent?.updateStatus()
+                if (updateParent) parent?.updateStatus()
                 return true
             } else {
                 println("Error: Simple tasks don't support \"InProgress\" status")
@@ -64,7 +62,7 @@ class SimpleTask (
     //
 
     override fun calculateProgress(inPercents: Boolean?): Double {
-        return when (this.getStatus()) {
+        return when (this.getCurrentStatus()) {
             StatusType.Failed -> 0.0
             StatusType.ToDo -> 0.0
             StatusType.InProgress -> 0.0

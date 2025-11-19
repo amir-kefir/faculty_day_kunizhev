@@ -1,8 +1,5 @@
 package ru.tbank.education.school.lesson2.homework.task_manager
 
-import ru.tbank.education.school.lesson2.homework.task_manager.SimpleTask
-import javax.print.attribute.standard.JobPriority
-
 class Project (
     id: String,
     description: String,
@@ -11,7 +8,7 @@ class Project (
     status: StatusType,
     failureReason: String,
     parent: Project?,
-    var tasks: Array<Task>,
+    var tasks: MutableList<Task>,
 ) : Task (
     id,
     User(" "," "," "), // (rus) Не знаю как по-другому убрать юзера. Он не нужен
@@ -36,7 +33,7 @@ class Project (
         status = StatusType.ToDo,
         failureReason = "-",
         parent = null,
-        tasks = emptyArray()
+        tasks = mutableListOf()
     )
 
     // user-start
@@ -85,17 +82,19 @@ class Project (
         } else return false
     }
 
-    override fun changeStatus(type: StatusType?): Boolean {
-        super.changeStatus(type)
+    override fun changeStatus(type: StatusType?, updateParent: Boolean): Boolean {
+        if (type == null) return false
+
+        this.status = type
         when (type) { // (rus) Да, я повторил кучу циклов, сори, но это никак не влияет на скорость. :sob:
             StatusType.Done -> {
                 for (task in tasks) {
-                    task.changeStatus(StatusType.Done)
+                    task.changeStatus(StatusType.Done, false)
                 }
             }
             StatusType.ToDo -> {
                 for (task in tasks) {
-                    task.changeStatus(StatusType.ToDo)
+                    task.changeStatus(StatusType.ToDo, false)
                 }
             }
             StatusType.Failed -> {
@@ -112,7 +111,7 @@ class Project (
         var currentStatus: StatusType = StatusType.ToDo
         var completedTasks: Int = 0
         for (task in tasks) {
-            when (task.getStatus()) {
+            when (task.getCurrentStatus()) {
                 StatusType.ToDo -> break
                 StatusType.Failed -> break
                 StatusType.InProgress -> {
@@ -133,19 +132,19 @@ class Project (
     //
 
     override fun calculateProgress(inPercents: Boolean?): Double{
+        if (tasks.isEmpty()) return 0.0
+
         var progress: Double = 0.0
         for (task in tasks) {
-            progress += when (task.getStatus()) {
+            progress += when (task.getCurrentStatus()) {
                 StatusType.Done -> 1.0
                 StatusType.InProgress -> .5
-                StatusType.ToDo -> 0.0
                 else -> 0.0
             }
         }
         return when (inPercents) {
-            true -> progress/tasks.size
-            false -> progress/tasks.size*100
-            null -> progress/tasks.size*100
+            true -> progress/tasks.size*100
+            else -> progress/tasks.size
         }
     }
 

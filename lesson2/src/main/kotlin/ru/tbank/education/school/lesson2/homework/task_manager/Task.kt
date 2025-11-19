@@ -44,7 +44,7 @@ open class Task (
 
     // user - start
     open fun assignUser(user: User?): Boolean {
-        if (user != null && this.getStatus() != StatusType.Done) {
+        if (user != null && this.getCurrentStatus() != StatusType.Done) {
             this.user = user
             return true
         } else return false
@@ -88,10 +88,10 @@ open class Task (
     }
     // description/title - end
 
-    open fun changeStatus(type: StatusType? = null): Boolean {
+    open fun changeStatus(type: StatusType? = null, updateParent: Boolean = true): Boolean {
         if (type != null) {
             this.status = type
-            parent?.updateStatus()
+            if (updateParent) parent?.updateStatus()
             return true
         } else return false
     }
@@ -102,14 +102,23 @@ open class Task (
         return true
     }
 
-    fun getStatus(): StatusType {
+    fun getCurrentStatus(): StatusType {
         return this.status
+    }
+
+    fun getCurrentStatusInString(): String {
+        return when (this.status) {
+            StatusType.Failed -> "Failed :("
+            StatusType.ToDo -> "To do"
+            StatusType.InProgress -> "In progress"
+            StatusType.Done -> "Done"
+        }
     }
 
     //abstract
 
     override fun calculateProgress(inPercents: Boolean?): Double {
-        return when (this.getStatus()) {
+        return when (this.getCurrentStatus()) {
             StatusType.Failed -> 0.0
             StatusType.ToDo -> 0.0
             StatusType.InProgress -> if (inPercents == true) 50.0 else 0.5

@@ -21,7 +21,7 @@ class TaskManager {
         user: User?,
         title: String,
         description: String,
-        priority: Int = 0,) {
+        priority: Int = 0,): Task {
             val newTask = Task(
                 id = "T-${taskSeq++}",
                 user = user,
@@ -30,12 +30,27 @@ class TaskManager {
                 priority = priority,
             )
             tasks.add(newTask)
+        return newTask
+    }
+
+    fun addSimpleTask(
+        user: User?,
+        title: String,
+        priority: Int = 0,): SimpleTask {
+            val newTask = SimpleTask(
+                id = "T-${taskSeq++}",
+                user = user,
+                title = title,
+                priority = priority,
+            )
+            tasks.add(newTask)
+        return newTask
     }
 
     fun addProject(
         title: String,
         description: String,
-        priority: Int = 0,) {
+        priority: Int = 0,): Project {
             val newProject = Project(
                 id = "P-${projectSeq++}",
                 title = title,
@@ -43,6 +58,7 @@ class TaskManager {
                 priority = priority,
             )
             projects.add(newProject)
+        return newProject
     }
 
     fun getUserById(id: String): User? = users.find { it.getId() == id }
@@ -61,13 +77,14 @@ class TaskManager {
         val project = getProjectById(projectId)
         if (task != null && project != null) {
             task.parent = project
+            project.tasks.add(task)
             return true
         }
         return false
     }
 
     fun deleteTask(taskToDelete: Task) {
-        for (task in tasks.filter { it.getId() > taskToDelete.getId() }) {
+        for (task in tasks.filter { it.getId().drop(2).toInt() > taskToDelete.getId().drop(2).toInt() }) {
             task.changeId("T-${task.getId().drop(2).toInt()-1}")
         }
         tasks.remove(taskToDelete)
@@ -75,7 +92,7 @@ class TaskManager {
     }
 
     fun deleteProject(projectToDelete: Project) {
-        for (project in projects.filter { it.getId() > projectToDelete.getId() }) {
+        for (project in projects.filter { it.getId().drop(2).toInt() > projectToDelete.getId().drop(2).toInt() }) {
             project.changeId("P-${project.getId().drop(2).toInt()-1}")
         }
         projects.remove(projectToDelete)
@@ -83,7 +100,7 @@ class TaskManager {
     }
 
     fun deleteUser(userToDelete: User) {
-        for (user in users.filter { it.getId() > userToDelete.getId() }) {
+        for (user in users.filter { it.getId().drop(2).toInt() > userToDelete.getId().drop(2).toInt() }) {
             user.changeId("U-${user.getId().drop(2).toInt()-1}")
         }
         users.remove(userToDelete)
