@@ -16,7 +16,7 @@ fun main() {
         title = "Create basic structure",
         description = "Create Task and Project classes",
         priority = 1,
-        user = User("Amir", "Kunizhev", "amir@example.com")
+        user = User("Amir", "Kunizhev", "amir@example.com"),
     )
 
     val simpleTask = manager.addSimpleTask(
