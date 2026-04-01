@@ -13,7 +13,7 @@ class Archiver {
             zos = ZipOutputStream(FileOutputStream(zipFile))
             addFiles(sourceDir, sourceDir.name, zos)
         } catch (e: Exception) {
-            println("Ошибка архивирования: ${e.message}")
+            println("ошибка в архивировании: ${e.message}")
         } finally {
             zos?.close()
         }
@@ -34,7 +34,7 @@ class Archiver {
             return
         }
 
-        println("Добавляется: $path (${file.length()} байт)")
+        println("добавляется: $path (${file.length()} байт)")
 
         var fis: FileInputStream? = null
         try {
@@ -52,7 +52,7 @@ class Archiver {
             }
 
         } catch (e: Exception) {
-            println("Ошибка файла $path")
+            println("ошибка в файле $path")
         } finally {
             fis?.close()
         }
